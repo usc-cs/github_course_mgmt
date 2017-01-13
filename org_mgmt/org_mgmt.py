@@ -19,9 +19,9 @@ import simplejson
 
 ORG_NAME = sys.argv[1]
 CSV_FILENAME = sys.argv[2]
-REPO_PREFIX = sys.argv[3] + '_'
+REPO_PREFIX = sys.argv[3] + '-'
 HOOK_URL = 'http://bits.usc.edu/cs104-hooks/push.php'
-SSH_KEY = '~/.ssh/ptzbot_id_rsa'
+SSH_KEY = '~/.ssh/usc-csci104-bot_id_rsa'
 
 TEMP_REPOS_DIR = 'temp_repos'
 SKELETON_REPO_DIR = 'skeleton_repo'
@@ -145,9 +145,10 @@ BEGIN SCRAPING
 """
 
 graders_team_id = find_team_id('Graders')
-teaching_staff_team_id = find_team_id('TeachingStaff')
+#teaching_staff_team_id = find_team_id('TeachingStaff')
 students_team_id = find_team_id('Students')
 
+shell('eval "$(ssh-agent)"')
 shell('ssh-add -D')
 shell('ssh-add ' + SSH_KEY)
 shell('mkdir ' + TEMP_REPOS_DIR)
@@ -162,7 +163,7 @@ with open(CSV_FILENAME, 'r') as csvfile:
         repo_name = REPO_PREFIX + usc_username
 
         print 'Processing {}, {}'.format(gh_username, usc_username)
-
+        print gh_username, usc_username, repo_name
         print hint('Creating team', 36)
         student_team_id = create_team('student_' + usc_username)
         print hint('Adding student to individual team', 36)
